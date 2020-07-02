@@ -11,6 +11,10 @@
 <body>
     <img id="like" class="ok" src="like.jpg">
     <img id="dislike" class="ok" src="dislike.jpg">
+    <div id="warn">
+        <input type="button" value="New Game" onclick="hide(); newGame()">
+    </div>
+
     <h1>Secret Number Game</h1>
     <div id="message">Let guess the secret number!</div>
     <br>
@@ -28,23 +32,41 @@
             return 10;
         }
 
+        function hide() {
+            document.getElementById("warn").style.zIndex = -2;
+            document.getElementById("warn").style.opacity = 0;
+        }
+
+        function newGame() {
+            life = getLife();
+            randomNumber = Math.floor(Math.random() * 30);
+            document.getElementById("message").innerText = "Let guess the secret number!"
+            clearAll();
+        }
+
         function getNew() {
-            randomNumber = Math.floor(Math.random() * 12);
+            randomNumber = Math.floor(Math.random() * 30);
             life = getLife();
         }
         btn.addEventListener("click", function() {
 
-            // if (document.getElementById("dislike").className != "ok") {
-            //     console.log("not ok");
-            // } else {
-            //     console.log("ok");
-            //     play();
-            // }
+            if (life == 10) {
+                clearAll();
+            }
 
-            // function play() {
+            setTimeout(() => {
+                document.getElementById("dislike").className = 'ok';
+                document.getElementById("like").className = 'ok';
+            }, 600);
+
             const yourInput = parseInt(document.getElementById("anumber").value);
 
-            document.getElementById("anumber").value = "";
+            if (life == 1 && yourInput != randomNumber) {
+                document.getElementById("warn").style.zIndex = 2;
+                document.getElementById("warn").style.opacity = 1;
+            }
+
+
 
             console.log("You entered: ", yourInput);
             i++;
@@ -52,15 +74,7 @@
             if (yourInput < randomNumber) {
                 life--;
                 document.getElementById("message").innerHTML = "The secret number is larger! " + life + " lifes left!";
-
-                function test(callback) {
-                    document.getElementById("dislike").className = "dislike";
-                    setTimeout(callback(), 1000);
-                }
-                test(function call() {
-                    document.getElementById("dislike").className = "ok";
-                })
-
+                document.getElementById("dislike").className = "dislike";
             } else if (yourInput > randomNumber) {
                 life--;
                 document.getElementById("message").innerHTML = "The secret number is smaller! " + life + " lifes left!";
@@ -70,11 +84,14 @@
                 document.getElementById("message").innerHTML = "Congratulate, the secret number is " + yourInput + "!" +
                     "<br>" + "The new secret number has generated, continue?";
                 getNew();
+                clearAll();
             }
 
-            text += i + ". Guessed number: " + yourInput + "<br>";
-            document.getElementById("his").innerHTML = text;
-
+            if (document.getElementById("anumber").value != "") {
+                text += i + ". Guessed number: " + yourInput + "<br>";
+                document.getElementById("his").innerHTML = text;
+            }
+            document.getElementById("anumber").value = "";
         });
 
         function clearAll() {
