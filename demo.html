@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <img id="like" class="ok" src="like.jpg">
+    <img id="dislike" class="ok" src="dislike.jpg">
+    <h1>Secret Number Game</h1>
+    <div id="message">Let guess the secret number!</div>
+    <br>
+    <input type="number" id="anumber">
+    <button id="btn">Guest</button>
+
+    <script>
+        let btn = document.getElementById("btn");
+        var text = "";
+        var i = 0;
+        let randomNumber = 0;
+        let life = getLife();
+
+        function getLife() {
+            return 10;
+        }
+
+        function getNew() {
+            randomNumber = Math.floor(Math.random() * 12);
+            life = getLife();
+        }
+        btn.addEventListener("click", function() {
+
+            // if (document.getElementById("dislike").className != "ok") {
+            //     console.log("not ok");
+            // } else {
+            //     console.log("ok");
+            //     play();
+            // }
+
+            // function play() {
+            const yourInput = parseInt(document.getElementById("anumber").value);
+
+            document.getElementById("anumber").value = "";
+
+            console.log("You entered: ", yourInput);
+            i++;
+
+            if (yourInput < randomNumber) {
+                life--;
+                document.getElementById("message").innerHTML = "The secret number is larger! " + life + " lifes left!";
+
+                function test(callback) {
+                    document.getElementById("dislike").className = "dislike";
+                    setTimeout(callback(), 1000);
+                }
+                test(function call() {
+                    document.getElementById("dislike").className = "ok";
+                })
+
+            } else if (yourInput > randomNumber) {
+                life--;
+                document.getElementById("message").innerHTML = "The secret number is smaller! " + life + " lifes left!";
+                document.getElementById("dislike").className = "dislike";
+            } else if (yourInput == randomNumber) {
+                document.getElementById("like").className = "like";
+                document.getElementById("message").innerHTML = "Congratulate, the secret number is " + yourInput + "!" +
+                    "<br>" + "The new secret number has generated, continue?";
+                getNew();
+            }
+
+            text += i + ". Guessed number: " + yourInput + "<br>";
+            document.getElementById("his").innerHTML = text;
+
+        });
+
+        function clearAll() {
+            var newt = "";
+            document.getElementById("his").innerHTML = newt;
+            text = "";
+            i = 0;
+        }
+    </script>
+
+    <h1>History</h1>
+    <input type="button" value="Clear history" onclick="clearAll()"></input><br><br>
+    <div id="his"></div>
+
+
+</body>
+
+</html>
